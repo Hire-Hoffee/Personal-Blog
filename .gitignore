@@ -29,4 +29,3 @@ server/prisma/migrations
 server/prisma/dev.db
 server/prisma/dev.db-journal
 server/uploads
-server/swagger_output.json
