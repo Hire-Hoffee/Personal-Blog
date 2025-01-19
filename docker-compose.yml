@@ -14,5 +14,5 @@ services:
     deploy:
       resources:
         limits:
-          memory: 200M
+          memory: 250M
     restart: on-failure
