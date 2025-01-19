@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:4000/api",
+      "url": "http://petblog.freemyip.com/api",
       "description": "Server URL"
     }
   ],
@@ -676,7 +676,7 @@
           },
           "createdAt": {
             "type": "string",
-            "example": "Sun Jan 19 2025 17:30:57 GMT+0200 (Восточная Европа, стандартное время)"
+            "example": "Sun Jan 19 2025 23:54:34 GMT+0200 (Восточная Европа, стандартное время)"
           },
           "author": {
             "type": "object",

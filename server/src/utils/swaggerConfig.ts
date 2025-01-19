@@ -1,4 +1,6 @@
 import swaggerAutogen from "swagger-autogen";
+import dotenv from "dotenv";
+dotenv.config();
 
 const models = {
   Auth: { username: "lorem", password: "ipsum" },
@@ -22,7 +24,7 @@ const doc = {
   },
   servers: [
     {
-      url: "http://localhost:4000/api",
+      url: process.env.API_URL || "http://localhost:7007/api",
       description: "Server URL",
     },
   ],
