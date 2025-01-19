@@ -40,3 +40,31 @@
 **Нельзя использовать:**
 
 - Next.js.
+
+## Запуск
+
+#### Ручной
+
+- Клонировать репозиторий `git clone`
+- Установить зависимости в `/client` и `/server` через `npm install`
+- Добавить `.env` файлы в `/client` и `/server`
+  - `client`:
+  - VITE_API_URL = http://localhost:7007
+  - `server`:
+  - PORT=7007
+  - DATABASE_URL="file:./dev.db"
+  - JWT_SECRET=9Bdw38lFl4zOHczrxM8wtRX8QlD4a4Fh
+- Произвести миграции БД `npx prisma generate` и `npx prisma migrate dev --name init` в папке `/server`
+- Запустить фронт и бэк через `npm run dev` или произвести сборку фронта и запускать только бэк
+
+#### Через docker
+
+- Клонировать репозиторий `git clone`
+- Добавить `.env` файлы в `/client` и `/server`
+  - `client`:
+  - VITE_API_URL = http://localhost:7007
+  - `server`:
+  - PORT=7007
+  - DATABASE_URL="file:./dev.db"
+  - JWT_SECRET=9Bdw38lFl4zOHczrxM8wtRX8QlD4a4Fh
+- Выполнить `docker-compose build` и `docker-compose up -d`
