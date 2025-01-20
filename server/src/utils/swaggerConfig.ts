@@ -1,5 +1,6 @@
 import swaggerAutogen from "swagger-autogen";
 import dotenv from "dotenv";
+import path = require("path");
 dotenv.config();
 
 const models = {
@@ -24,7 +25,7 @@ const doc = {
   },
   servers: [
     {
-      url: process.env.API_URL || "http://localhost:7007/api",
+      url: process.env.STATUS === "DEV" ? "http://localhost:7007/api" : process.env.API_URL,
       description: "Server URL",
     },
   ],
@@ -39,7 +40,7 @@ const doc = {
   },
 };
 
-const outputFile = "./swagger_output.json";
+const outputFile = path.join(__dirname, "../../swagger_output.json");
 const endpointsFiles = ["./src/routes/index.ts"];
 
 swaggerAutogen({ openapi: "3.0.0" })(outputFile, endpointsFiles, doc);

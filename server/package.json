@@ -5,6 +5,7 @@
   "scripts": {
     "predev": "ts-node ./src/utils/swaggerConfig.ts",
     "dev": "nodemon --exec ts-node -r tsconfig-paths/register src/server.ts",
+    "prestart": "ts-node ./src/utils/swaggerConfig.ts",
     "start": "ts-node -r tsconfig-paths/register src/server.ts"
   },
   "keywords": [],
