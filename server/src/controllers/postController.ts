@@ -1,28 +1,19 @@
 import { Request, Response } from "express";
-import prisma from "@/utils/prismaClient";
+import {
+  getAllPosts,
+  createNewPost,
+  updateExistingPost,
+  deleteExistingPost,
+} from "@/services/postServices";
 
 export const getPosts = async (req: Request, res: Response) => {
-  /**  
-    #swagger.summary = 'Получение всех постов'
-    #swagger.responses[200] = {
-      schema: { $ref: '#/definitions/Posts' }
-    }
-    #swagger.responses[500] = {
-      schema: { message: "Ошибка получения записей" }
-    }
-  */
   try {
-    const posts = await prisma.post.findMany({
-      include: {
-        author: {
-          select: { username: true },
-        },
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
-
+    /**  
+      #swagger.summary = 'Получение всех постов'
+      #swagger.responses[200] = { schema: { $ref: '#/definitions/Posts' } }
+      #swagger.responses[500] = { schema: { message: "Ошибка получения записей" } }
+    */
+    const posts = await getAllPosts();
     res.status(200).json(posts);
   } catch (error) {
     console.error(error);
@@ -31,50 +22,32 @@ export const getPosts = async (req: Request, res: Response) => {
 };
 
 export const createPost = async (req: Request, res: Response) => {
-  /**  
-    #swagger.summary = 'Создание поста'
-    #swagger.security = [{
-            "bearerAuth": []
-    }]
-    #swagger.requestBody = {
-      required: true,
-      content: {
-        'multipart/form-data': {
-          schema: {
-            type: 'object',
-            properties: {
-              content: { type: 'string' },
-              media: { type: 'file', format: 'binary' }
+  try {
+    /**  
+      #swagger.summary = 'Создание поста'
+      #swagger.security = [{ "bearerAuth": [] }]
+      #swagger.requestBody = {
+        required: true,
+        content: {
+          'multipart/form-data': {
+            schema: {
+              type: 'object',
+              properties: {
+                content: { type: 'string' },
+                media: { type: 'file', format: 'binary' }
+              }
             }
           }
         }
       }
-    }
-    #swagger.responses[201] = {
-      schema: { $ref: '#/definitions/Post' }
-    }
-    #swagger.responses[500] = {
-      schema: { message: "Ошибка создания поста" }
-    }
-  */
-  try {
+      #swagger.responses[201] = { schema: { $ref: '#/definitions/Post' } }
+      #swagger.responses[500] = { schema: { message: "Ошибка создания поста" } }
+    */
     const { content } = req.body;
     const userId = req.user.id;
-    const filename = req.file ? `${req.user.id}_${req.file?.originalname}` : null;
+    const filename = req.file ? `${req.user.id}_${req.file.originalname}` : null;
 
-    const post = await prisma.post.create({
-      data: {
-        content,
-        media: filename,
-        authorId: userId,
-      },
-      include: {
-        author: {
-          select: { username: true },
-        },
-      },
-    });
-
+    const post = await createNewPost(userId, content, filename);
     res.status(201).json(post);
   } catch (error) {
     console.error(error);
@@ -83,91 +56,70 @@ export const createPost = async (req: Request, res: Response) => {
 };
 
 export const updatePost = async (req: Request, res: Response) => {
-  /**  
-    #swagger.summary = 'Обновление поста'
-    #swagger.consumes = ['multipart/form-data']
-    #swagger.security = [{
-            "bearerAuth": []
-    }]
-    #swagger.requestBody = {
-      required: true,
-      content: {
-        'multipart/form-data': {
-          schema: {
-            type: 'object',
-            properties: {
-              content: { type: 'string' },
-              media: { type: 'file', format: 'binary' }
+  try {
+    /**  
+      #swagger.summary = 'Обновление поста'
+      #swagger.consumes = ['multipart/form-data']
+      #swagger.security = [{ "bearerAuth": [] }]
+      #swagger.requestBody = {
+        required: true,
+        content: {
+          'multipart/form-data': {
+            schema: {
+              type: 'object',
+              properties: {
+                content: { type: 'string' },
+                media: { type: 'file', format: 'binary' }
+              }
             }
           }
         }
       }
-    }
-    #swagger.responses[201] = {
-      schema: { $ref: '#/definitions/Post' }
-    }
-    #swagger.responses[403] = {
-      schema: { message: "У вас нет прав для редактирования" }
-    }
-    #swagger.responses[500] = {
-      schema: { message: "Ошибка обновления записи" }
-    }
-  */
-  try {
+      #swagger.responses[200] = { schema: { $ref: '#/definitions/Post' } }
+      #swagger.responses[403] = { schema: { message: "У вас нет прав для редактирования" } }
+      #swagger.responses[500] = { schema: { message: "Ошибка обновления записи" } }
+    */
     const { id } = req.params;
     const { content } = req.body;
     const userId = req.user.id;
-    const filename = req.file ? `${req.user.id}_${req.file?.originalname}` : null;
+    const filename = req.file ? `${req.user.id}_${req.file.originalname}` : null;
 
-    const post = await prisma.post.findUnique({ where: { id: parseInt(id) } });
-    if (!post || post.authorId !== userId) {
-      res.status(403).json({ message: "У вас нет прав для редактирования" });
-      return;
-    }
-
-    const updatedPost = await prisma.post.update({
-      where: { id: parseInt(id) },
-      data: { content, media: filename },
-    });
-
+    const updatedPost = await updateExistingPost(parseInt(id), userId, content, filename);
     res.status(200).json(updatedPost);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Ошибка обновления записи" });
+    if (error instanceof Error) {
+      if (error.message === "Forbidden") {
+        res.status(403).json({ message: "У вас нет прав для редактирования" });
+      } else {
+        console.error(error);
+        res.status(500).json({ message: "Ошибка обновления записи" });
+      }
+    }
   }
 };
 
 export const deletePost = async (req: Request, res: Response) => {
-  /**  
-    #swagger.summary = 'Удаление поста'
-    #swagger.security = [{
-            "bearerAuth": []
-    }]
-    #swagger.responses[200] = {
-      schema: { message: 1 }
-    }
-    #swagger.responses[403] = {
-      schema: { message: "У вас нет прав для удаления" }
-    }
-    #swagger.responses[500] = {
-      schema: { message: "Ошибка удаления записи" }
-    }
-  */
   try {
+    /**  
+      #swagger.summary = 'Удаление поста'
+      #swagger.security = [{ "bearerAuth": [] }]
+      #swagger.responses[200] = { schema: { message: 1 } }
+      #swagger.responses[403] = { schema: { message: "У вас нет прав для удаления" } }
+      #swagger.responses[500] = { schema: { message: "Ошибка удаления записи" } }
+    */
     const { id } = req.params;
     const userId = req.user.id;
 
-    const post = await prisma.post.findUnique({ where: { id: parseInt(id) } });
-    if (!post || post.authorId !== userId) {
-      res.status(403).json({ message: "У вас нет прав для удаления" });
-      return;
-    }
-
-    const result = await prisma.post.delete({ where: { id: parseInt(id) } });
-
+    const result = await deleteExistingPost(parseInt(id), userId);
     res.status(200).json({ message: result.id });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Ошибка удаления записи" });
+    if (error instanceof Error) {
+      if (error.message === "Forbidden") {
+        res.status(403).json({ message: "У вас нет прав для удаления" });
+      } else {
+        console.error(error);
+        res.status(500).json({ message: "Ошибка удаления записи" });
+      }
+    }
   }
 };
