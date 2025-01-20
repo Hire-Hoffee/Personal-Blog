@@ -39,7 +39,7 @@ export const registerSchema = yup
     password: yup
       .string()
       .required("Пароль обязателен.")
-      .min(6, "Пароль должен содержать минимум 6 символов.")
+      .min(8, "Пароль должен содержать минимум 8 символов.")
       .max(50, "Пароль не должен превышать 50 символов."),
     confirmPassword: yup
       .string()
