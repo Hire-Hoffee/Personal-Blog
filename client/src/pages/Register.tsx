@@ -34,7 +34,14 @@ const Register = () => {
         alignItems: "center",
       }}
     >
-      <Box width={"320px"}>
+      <Box
+        sx={{
+          backgroundColor: "#fff",
+          padding: "10px",
+          borderRadius: "10px",
+          border: "1px solid #ccc",
+        }}
+      >
         <Typography variant="h4" gutterBottom>
           Зарегистрироваться
         </Typography>

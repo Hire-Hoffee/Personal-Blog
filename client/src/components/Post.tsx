@@ -1,4 +1,4 @@
-import { Card, CardContent, Typography, CardActions, Button, Box } from "@mui/material";
+import { Card, CardContent, Typography, CardActions, Button, Box, Divider } from "@mui/material";
 import { deletePost } from "@/store/slices/postSlice";
 import { PostsData } from "@/types";
 import { useAppDispatch, useAppSelector } from "@/store";
@@ -33,6 +33,7 @@ function Post({ post }: Props) {
           flexDirection: "column",
           justifyContent: "space-between",
           padding: "10px",
+          borderRadius: "10px",
         }}
       >
         <CardContent>
@@ -42,6 +43,7 @@ function Post({ post }: Props) {
           <Typography variant="body2" color="text.secondary" fontSize={"12px"}>
             {new Date(post.createdAt).toLocaleString()}
           </Typography>
+          <Divider sx={{ marginTop: "5px" }} />
           <Box marginTop={"20px"}>
             <Typography variant="body2" color="text.secondary" marginBottom={"5px"}>
               {post.content}

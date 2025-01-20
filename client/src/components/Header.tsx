@@ -17,9 +17,16 @@ function Header({ handleModal }: Props) {
   };
 
   return (
-    <Box>
-      <Typography variant="h4" textAlign={"center"} marginY={"20px"} fontWeight={"bold"}>
-        Личный Блог
+    <Box
+      sx={{
+        backgroundColor: "#fff",
+        padding: "10px",
+        borderRadius: "10px",
+        border: "1px solid #ccc",
+      }}
+    >
+      <Typography variant="h4" textAlign={"center"} marginY={"20px"} letterSpacing={"2px"}>
+        Personal Blog
       </Typography>
       <Box display="flex" justifyContent="center" gap={"20px"}>
         {userId && (

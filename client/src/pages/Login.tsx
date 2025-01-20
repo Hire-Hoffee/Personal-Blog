@@ -27,14 +27,21 @@ const Login = () => {
   return (
     <Box
       sx={{
-        margin: "40px",
+        padding: "40px",
         display: "flex",
         flexDirection: "column",
         gap: "20px",
         alignItems: "center",
       }}
     >
-      <Box width={"320px"}>
+      <Box
+        sx={{
+          backgroundColor: "#fff",
+          padding: "10px",
+          borderRadius: "10px",
+          border: "1px solid #ccc",
+        }}
+      >
         <Typography variant="h4" gutterBottom>
           Вход
         </Typography>
