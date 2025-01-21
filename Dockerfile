@@ -1,4 +1,4 @@
-FROM node:22-alpine as frontend
+FROM node:22-alpine AS frontend
 
 WORKDIR /frontend
 COPY ./client/package*.json ./
@@ -7,7 +7,7 @@ COPY ./client .
 RUN npm run build
 
 
-FROM node:22-alpine as backend
+FROM node:22-alpine AS backend
 
 WORKDIR /backend
 COPY --from=frontend /frontend/dist ../client/dist
