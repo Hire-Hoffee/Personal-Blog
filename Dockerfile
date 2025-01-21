@@ -17,6 +17,6 @@ COPY ./server .
 RUN npx prisma generate
 EXPOSE 4000
 
-CMD if [ ! -d "prima/migrations" ]; then \
-  npx prisma migrate dev --name init && npx prisma migrate deploy; fi\
-  && npm start
+CMD ["sh", "-c", \
+  "if [ ! -d 'prima/migrations' ]; then npx prisma migrate dev --name init && npx prisma migrate deploy; fi \
+  && npm start"]
