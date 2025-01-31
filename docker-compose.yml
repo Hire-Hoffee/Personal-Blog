@@ -16,6 +16,8 @@ services:
         limits:
           memory: 250M
     restart: on-failure
+    networks:
+      - shared-pet
 
 networks:
   shared-pet:
