@@ -49,9 +49,9 @@
 - Установить зависимости в `/client` и `/server` через `npm install`
 - Добавить `.env` файлы в `/client` и `/server`
   - `client`:
-  - VITE_API_URL = http://localhost:7007
+  - VITE_API_URL = http://localhost:7005
   - `server`:
-  - PORT=7007
+  - PORT=7005
   - DATABASE_URL="file:./dev.db"
   - JWT_SECRET=9Bdw38lFl4zOHczrxM8wtRX8QlD4a4Fh
 - Произвести миграции БД `npx prisma generate` и `npx prisma migrate dev --name init` в папке `/server`
@@ -62,9 +62,9 @@
 - Клонировать репозиторий `git clone`
 - Добавить `.env` файлы в `/client` и `/server`
   - `client`:
-  - VITE_API_URL = http://localhost:7007
+  - VITE_API_URL = http://localhost:7005
   - `server`:
-  - PORT=7007
+  - PORT=7005
   - DATABASE_URL="file:./dev.db"
   - JWT_SECRET=9Bdw38lFl4zOHczrxM8wtRX8QlD4a4Fh
 - Выполнить `docker-compose build` и `docker-compose up -d`

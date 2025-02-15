@@ -25,7 +25,7 @@ const doc = {
   },
   servers: [
     {
-      url: process.env.STATUS === "DEV" ? "http://localhost:7007/api" : process.env.API_URL,
+      url: process.env.STATUS === "DEV" ? "http://localhost:7005/api" : process.env.API_URL,
       description: "Server URL",
     },
   ],

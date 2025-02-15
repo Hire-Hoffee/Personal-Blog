@@ -10,7 +10,7 @@ services:
       - ./server/prisma:/backend/prisma
       - ./server/uploads:/backend/uploads
     ports:
-      - "7007:7007"
+      - "7005:7005"
     deploy:
       resources:
         limits:

@@ -15,7 +15,7 @@ COPY ./server/package*.json ./
 RUN npm ci
 COPY ./server .
 RUN npx prisma generate
-EXPOSE 4000
+EXPOSE 7005
 
 CMD ["sh", "-c", \
   "if [ ! -d 'prima/migrations' ]; then npx prisma migrate dev --name init && npx prisma migrate deploy; fi \
